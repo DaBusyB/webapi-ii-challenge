@@ -2,7 +2,7 @@
 
 ## Topics:
 
-- Express Routing
+- Express Routing 
 - Reading Request data from body and URL parameters
 - Subroutes
 - API design and development.
