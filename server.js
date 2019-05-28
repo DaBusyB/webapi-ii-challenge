@@ -6,7 +6,7 @@ const server = express()
 
 server.use(express.json())
 
-server.use('api/posts', PostsRouter)
+server.use('/api/posts', PostsRouter)
 
 server.get('/', (req, res) => {
     res.send(`
