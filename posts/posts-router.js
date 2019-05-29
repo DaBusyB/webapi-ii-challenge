@@ -39,19 +39,22 @@ router.post('/', async (req, res) => {
 
         const post = await Posts.insert(req.body)
 
-        if (post) {
-            res.status(201).json(post)
-        } else {
-            res.status(400).json({
-                error: 'Please provide title AND contents for the post.'
-            })
-        }
-         
-        
+        post ? res.status(201).json(post) : res.status(400).json({error: 'Please provide title AND contents for the post.'})
     } catch (error) {
         res.status(500).json({
             error: 'There was an error while saving the post to the database.'
         })
+    }
+})
+
+router.delete('/:id', async (req, res) => {
+    try {
+        console.log('inside delete')
+        const post = await Posts.remove(req.params.id)
+
+        post > 0 ? res.status(201).json(post) : res.status(404).json({ message: 'The post with the specified ID does not exist'}) 
+    } catch (error) {
+        res.status(500).json({ error: 'The post could not be removed.' })
     }
 })
 
