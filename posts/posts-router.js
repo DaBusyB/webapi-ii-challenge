@@ -33,6 +33,19 @@ router.get('/:id', async (req, res) => {
     }
 })
 
+router.put('/:id', async (req, res) => {
+    try {
+        console.log('inside put')
+
+        const post = await Posts.update(req.params.id, req.body)
+
+        post ? res.status(200).json(post) :
+        res.status(404).json({message: 'The post with the specified ID does not exist.'})
+    } catch (error) {
+        res.status(500).json({ error: 'The post information could not be modified.'})
+    }
+})  
+
 router.post('/', async (req, res) => {
     try {
         console.log('inside post')
@@ -57,5 +70,7 @@ router.delete('/:id', async (req, res) => {
         res.status(500).json({ error: 'The post could not be removed.' })
     }
 })
+
+
 
 module.exports = router
