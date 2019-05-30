@@ -38,9 +38,14 @@ router.put('/:id', async (req, res) => {
         console.log('inside put')
 
         const post = await Posts.update(req.params.id, req.body)
+        
+        // if(!post.title || !post.contents) {
+        //     res.status(400).json({errorMessage: 'Please provide title AND contents for the post.'}) 
+        // }
 
         post ? res.status(200).json(post) :
-        res.status(404).json({message: 'The post with the specified ID does not exist.'})
+        res.status(404).json({message: 'The post with the specified ID does not exist.'});
+
     } catch (error) {
         res.status(500).json({ error: 'The post information could not be modified.'})
     }
@@ -71,6 +76,28 @@ router.delete('/:id', async (req, res) => {
     }
 })
 
+router.get('/:id/comments', async (req, res) => {
+    const {id} = req.params
 
+    try {
+        const comments = await Posts.findPostComments(id)
+
+        comments.length > 0 ? res.json(comments) : res.status(404).json({message: 'The post with the specified ID does not exist.'})
+    } catch (err) {
+        res.status(500).json({err})
+    }
+})
+
+router.post('/:id/comments', async (req, res) => {
+    const commentInfo = {...req.body, post_id: req.params.id}
+
+    try {
+        const newComment = await Posts.insertComment(commentInfo)
+
+        res.status(201).json(newComment)
+    } catch (err) {
+        res.status(500).json({err: 'There was an error while saving the comment to the database.'})
+    }
+})
 
 module.exports = router
